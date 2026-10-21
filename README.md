@@ -1,6 +1,6 @@
 # A little question for you 💌
 
-A phone-first “Will you be my Valentine?” page where saying no is… difficult.
+A phone-first “Will you go on a date with me?” page for Madison: a short poem first, then a question where saying no is… difficult.
 
 **Live:** https://ashup1101.github.io/for-you/
 **Make your own link:** https://ashup1101.github.io/for-you/create.html
@@ -18,14 +18,17 @@ A phone-first “Will you be my Valentine?” page where saying no is… difficu
 
 Add these to the link (or use [create.html](https://ashup1101.github.io/for-you/create.html)):
 
-- `to` – their name (`?to=Ananya`)
+- `to` – their name (defaults to Madison)
 - `from` – your name
-- `q` – a different question (default: “Will you be my Valentine?”)
+- `q` – a different question (default: “Will you go on a date with me?”)
+- `poem=0` – skip the poem page
 - `v` – `letter`, `classic`, `runaway` or `stars`
 
-Example: `https://ashup1101.github.io/for-you/?v=stars&to=Ananya&from=Ash`
+Example: `https://ashup1101.github.io/for-you/?v=stars&from=Ash`
 
 ## How it’s built
+
+After “yes”, she picks the date (coffee, dinner, ice cream, movie, sunset walk or surprise me) and can send her answer straight to Snapchat through the share sheet.
 
 One static `index.html` with no build step and no dependencies. It is made for phones: safe-area padding, no double-tap zoom, touch-aware dodging, haptics on Android, a link-preview card for iMessage/WhatsApp, and reduced motion when the phone asks for it.
 

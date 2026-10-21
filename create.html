@@ -35,6 +35,8 @@
     border: 1.5px solid #f3b6c9; border-radius: 14px; background: #fff; outline: none;
   }
   input[type=text]:focus { border-color: #ff3d7f; box-shadow: 0 0 0 4px rgba(255,61,127,.15); }
+  .check { display: flex; align-items: center; gap: 10px; margin: 2px 0 16px; font-weight: 500; cursor: pointer; }
+  .check input { width: 22px; height: 22px; accent-color: #ff3d7f; }
   fieldset { border: 0; padding: 0; margin: 6px 0 0; }
   .styles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .styles legend { grid-column: 1 / -1; }
@@ -71,9 +73,10 @@
   </header>
 
   <form class="panel" id="form" autocomplete="off" onsubmit="return false">
-    <label class="field"><span>Who’s it for?</span><input type="text" name="to" maxlength="40" placeholder="Their name"></label>
+    <label class="field"><span>Who’s it for?</span><input type="text" name="to" maxlength="40" placeholder="Madison"></label>
     <label class="field"><span>From</span><input type="text" name="from" maxlength="40" placeholder="Your name (optional)"></label>
-    <label class="field"><span>The question</span><input type="text" name="q" maxlength="140" placeholder="Will you be my Valentine?"></label>
+    <label class="field"><span>The question</span><input type="text" name="q" maxlength="140" placeholder="Will you go on a date with me?"></label>
+    <label class="check"><input type="checkbox" name="poem" checked> Show the poem first ✨</label>
     <fieldset class="styles">
       <legend>Pick a style</legend>
       <label class="style"><input type="radio" name="v" value="letter" checked><span class="swatch s-letter">💌</span><b>Love letter</b><small>Opens from an envelope. The “no” shrinks off the page.</small></label>
@@ -106,7 +109,7 @@
     const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
     for (const [k, val] of Object.entries(saved)) {
       const el = form.elements[k];
-      if (el && typeof val === 'string') el.value = val;
+      if (el && el.type !== 'checkbox' && typeof val === 'string') el.value = val;
     }
   } catch (e) {}
 
@@ -117,6 +120,7 @@
       const val = String(data.get(k) || '').trim();
       if (val) url.searchParams.set(k, val);
     }
+    if (!form.elements.poem.checked) url.searchParams.set('poem', '0');
     return url.href;
   }
 

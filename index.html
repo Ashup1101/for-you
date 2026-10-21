@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>A little question for you 💌</title>
-<meta name="description" content="Tap to open. Choose wisely 😌">
+<title>For Madison 💌</title>
+<meta name="description" content="A little question for you. Choose wisely 😌">
 <meta name="theme-color" content="#8f2145">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ashup1101.github.io/for-you/">
-<meta property="og:title" content="A little question for you 💌">
-<meta property="og:description" content="Tap to open. Choose wisely 😌">
+<meta property="og:title" content="For Madison 💌">
+<meta property="og:description" content="A little question for you. Choose wisely 😌">
 <meta property="og:image" content="https://ashup1101.github.io/for-you/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -129,9 +129,52 @@
   .art-emoji { font-size: 110px; line-height: 1.2; }
   .done-title { margin: 10px 0 6px; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.1; }
   .done-sub { margin: 0 0 6px; font-size: 1.15rem; }
-  .tally { margin: 0 0 22px; font-size: .98rem; opacity: .7; }
+  .tally { margin: 0 0 16px; font-size: .98rem; opacity: .7; }
   .share { max-width: 100%; font-size: 18px; padding: .75em 1.5em; background: var(--yes-bg); color: var(--yes-ink); box-shadow: 0 10px 24px -6px var(--yes-glow); }
   .stamp { display: none; }
+  .pick-q { margin: 0 0 10px; font-size: 1.05rem; font-weight: 600; }
+  .picks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 18px; }
+  .chip {
+    font: inherit; font-size: 14px; font-weight: 500; line-height: 1.15; color: inherit; cursor: pointer;
+    padding: 9px 4px; border-radius: 14px; border: 1.5px solid var(--chip-border, rgba(0,0,0,.08)); background: var(--chip-bg, rgba(255,255,255,.7));
+    transition: scale .25s, background .25s;
+  }
+  .chip .e { display: block; margin-bottom: 2px; font-size: 22px; }
+  .chip[aria-pressed=true] { background: var(--yes-bg); color: var(--yes-ink); border-color: transparent; scale: 1.05; box-shadow: 0 8px 18px -8px var(--yes-glow); }
+  .toast {
+    position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); z-index: 70; translate: -50% 16px; opacity: 0;
+    padding: 10px 16px; border-radius: 999px; background: rgba(25,10,25,.88); color: #fff; font-size: 15px; white-space: nowrap;
+    transition: opacity .3s, translate .3s; pointer-events: none;
+  }
+  .toast.on { opacity: 1; translate: -50% 0; }
+  @media (max-height: 720px) { .art { width: 130px; height: 130px; } .art-emoji { font-size: 84px; } }
+
+  /* ---------- poem ---------- */
+  .moon { display: block; width: clamp(84px, 26vw, 108px); height: auto; margin: 0 auto 4px; overflow: visible; filter: drop-shadow(0 0 22px rgba(255,226,140,.55)); animation: bob 3s ease-in-out infinite; }
+  .moon .blush, .moon .shy, .moon .pink { opacity: 0; transition: opacity 1.4s ease; }
+  .moon .open { transition: opacity .4s; }
+  .moon.blushing .blush { opacity: .85; }
+  .moon.blushing .shy { opacity: 1; }
+  .moon.blushing .open { opacity: 0; }
+  .moon.blushing .pink { opacity: .2; }
+  .verse { margin: 12px 0 14px; }
+  .line { margin: 0 0 6px; font-size: clamp(1.15rem, 5.2vw, 1.35rem); line-height: 1.35; opacity: 0; translate: 0 10px; filter: blur(5px); transition: opacity 1s ease, translate 1s ease, filter 1s ease; }
+  .line.on { opacity: 1; translate: 0 0; filter: none; }
+  .radiant { background: linear-gradient(90deg, #f59e0b, #ff4d8d, #f59e0b); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 600; animation: shimmer 3s linear infinite; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  .melt { display: block; width: 40px; height: 56px; margin: 0 auto 14px; overflow: visible; opacity: 0; transition: opacity .6s; }
+  .melt .heart, .melt .drip { transform-box: fill-box; }
+  .melt .drip { scale: 1 0; transform-origin: 50% 0; }
+  .melt.on { opacity: 1; }
+  .melt.on .heart { transform-origin: 50% 90%; animation: melt 2.6s ease-in-out .2s forwards; }
+  .melt.on .drip { animation: drip 2.2s ease-in 1s forwards; }
+  @keyframes melt { 30% { scale: 1.15; } 55% { scale: 1; } 100% { scale: 1.12 .8; } }
+  @keyframes drip { to { scale: 1 1; } }
+  .next {
+    font-size: 18px; padding: .75em 1.5em; background: var(--yes-bg); color: var(--yes-ink); box-shadow: 0 10px 24px -6px var(--yes-glow);
+    opacity: 0; translate: 0 10px; pointer-events: none; transition: opacity .6s, translate .6s, scale .2s;
+  }
+  .next.on { opacity: 1; translate: 0 0; pointer-events: auto; }
 
   /* ---------- letter ---------- */
   .intro { display: grid; justify-items: center; gap: 26px; }
@@ -171,8 +214,15 @@
   [data-v=letter] .question { margin: 12px 0 8px; text-align: center; font-size: clamp(2.5rem, 11.5vw, 3.1rem); font-weight: 700; line-height: 1; color: #a3122a; }
   [data-v=letter] .hint { text-align: center; font-size: 1.4rem; }
   [data-v=letter] .btn { font-family: "Caveat", cursive; font-weight: 700; }
-  [data-v=letter] .yes, [data-v=letter] .share { border-radius: 10px; font-size: 26px; padding: .3em 1.2em; }
-  [data-v=letter] .share { font-size: 23px; padding: .3em .9em; }
+  [data-v=letter] .yes, [data-v=letter] .share, [data-v=letter] .next { border-radius: 10px; font-size: 26px; padding: .3em 1.2em; }
+  [data-v=letter] .share, [data-v=letter] .next { font-size: 23px; padding: .3em .9em; }
+  [data-v=letter] .poem { text-align: left; }
+  [data-v=letter] .poem .hello { margin-bottom: 4px; }
+  [data-v=letter] .moon { width: 78px; margin: -4px auto 0; }
+  [data-v=letter] .line { margin: 0; font-size: clamp(1.7rem, 7.6vw, 2rem); line-height: 1.1; }
+  [data-v=letter] .poem .next { display: block; margin: 0 auto; }
+  [data-v=letter] .pick-q { font-size: 1.6rem; }
+  [data-v=letter] .chip { font-family: "Caveat", cursive; font-size: 19px; font-weight: 700; border-style: dashed; --chip-bg: rgba(255,255,255,.6); --chip-border: rgba(163,18,42,.3); }
   [data-v=letter] .no { border: 2px dashed currentColor; border-radius: 10px; font-size: 23px; padding: .25em .9em; box-shadow: none; }
   [data-v=letter] .done { text-align: center; }
   [data-v=letter] .done-title { color: #a3122a; font-size: clamp(2.4rem, 11vw, 3rem); }
@@ -196,6 +246,8 @@
   [data-v=stars] .mascot, [data-v=stars] .art-emoji { filter: drop-shadow(0 0 24px rgba(255,236,170,.55)); }
   [data-v=stars] .question { text-shadow: 0 0 18px rgba(205,180,255,.55); }
   [data-v=stars] .no { border: 1px solid rgba(255,255,255,.22); }
+  [data-v=stars] .line { text-shadow: 0 0 14px rgba(205,180,255,.45); }
+  [data-v=stars] .chip { --chip-bg: rgba(255,255,255,.08); --chip-border: rgba(255,255,255,.16); }
 
   #fx { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; }
 
@@ -225,6 +277,34 @@
     <p class="tap">tap to open</p>
   </section>
 
+  <section class="view card poem" id="poem" hidden>
+    <svg class="moon" id="moon" viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <radialGradient id="moon-fill" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fffbe6"/><stop offset=".6" stop-color="#fbe7a1"/><stop offset="1" stop-color="#f2cf6b"/></radialGradient>
+      </defs>
+      <circle cx="60" cy="60" r="48" fill="url(#moon-fill)"/>
+      <circle class="pink" cx="60" cy="60" r="48" fill="#ff7aa6"/>
+      <g fill="#e2bd55" opacity=".4"><circle cx="38" cy="36" r="7"/><circle cx="85" cy="42" r="4.5"/><circle cx="74" cy="92" r="5"/></g>
+      <g class="open" fill="#6b4a1f"><circle cx="46" cy="58" r="4"/><circle cx="74" cy="58" r="4"/></g>
+      <g class="shy" fill="none" stroke="#6b4a1f" stroke-width="3" stroke-linecap="round"><path d="M40 59q6-6 12 0"/><path d="M68 59q6-6 12 0"/></g>
+      <g class="blush" fill="#ff7aa6"><ellipse cx="37" cy="71" rx="8" ry="5"/><ellipse cx="83" cy="71" rx="8" ry="5"/></g>
+      <path d="M52 74q8 7 16 0" fill="none" stroke="#6b4a1f" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <p class="hello" id="poem-hello"></p>
+    <div class="verse">
+      <p class="line">By looking at the <span class="radiant">radiance</span> of your face…</p>
+      <p class="line">Even the moon blushes,</p>
+      <p class="line">When I see you smiling,</p>
+      <p class="line">my heart also melts. ✨🤌</p>
+    </div>
+    <svg class="melt" id="melt" viewBox="0 0 40 56" aria-hidden="true">
+      <g class="drip" fill="#ff4d6d"><rect x="18" y="30" width="4" height="16" rx="2"/><circle cx="20" cy="48" r="3.4"/></g>
+      <path class="heart" fill="#ff4d6d" d="M20 36C7 27 2 20 2 12.5 2 6.7 6.5 2 12 2c3.4 0 6.3 1.8 8 4.5C21.7 3.8 24.6 2 28 2c5.5 0 10 4.7 10 10.5C38 20 33 27 20 36z"/>
+    </svg>
+    <button class="btn next" id="next" type="button"></button>
+    <p class="sig" id="poem-sig"></p>
+  </section>
+
   <section class="view card" id="ask" hidden>
     <div class="mascot" id="mascot" aria-hidden="true"></div>
     <p class="hello" id="hello"></p>
@@ -243,10 +323,13 @@
     <h2 class="done-title" id="done-title"></h2>
     <p class="done-sub" id="done-sub"></p>
     <p class="tally" id="tally"></p>
-    <button class="btn share" id="share" type="button">Send your answer 💌</button>
+    <p class="pick-q">So… what are we doing? 👀</p>
+    <div class="picks" id="picks" role="group" aria-label="Pick our date"></div>
+    <button class="btn share" id="share" type="button">Snap me your answer 👻</button>
     <p class="sig" id="done-sig"></p>
   </section>
 </main>
+<div class="toast" id="toast" role="status"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <script>
@@ -261,7 +344,8 @@
   const VARIANTS = {
     letter: {
       theme: '#8f2145', yes: 'Yes ♡', floats: ['♥︎', '♡', '❥'], shrinkNo: true,
-      hello: to => `Dear ${to || 'you'},`,
+      hello: to => showPoem ? 'P.S.' : `Dear ${to},`,
+      poemHello: to => `Dear ${to},`, next: 'Turn the page →',
       steps: [
         { no: 'No', face: '🥰' },
         { no: 'Are you sure?', face: '🥺' },
@@ -275,11 +359,12 @@
         { no: 'n o', face: '😶' },
       ],
       end: 'vanish', endHint: '(the “no” fell off the page)', endFace: '😌',
-      done: { title: 'Signed, sealed, yours ♡', sub: to => withName('Best reply I’ve ever gotten', to, '.'), glyphs: ['💌', '❤️', '💋', '🌹'] },
+      done: { title: 'It’s a date ♡', sub: to => withName('Best reply I’ve ever gotten', to, '.'), glyphs: ['💌', '❤️', '💋', '🌹'] },
     },
     classic: {
       theme: '#ffc4d6', yes: 'Yes 💖', floats: ['💗', '💕', '💖', '🌸'],
-      hello: to => to ? `Hey ${to} 💕` : '',
+      hello: to => `Hey ${to} 💕`,
+      poemHello: to => `For ${to} 💕`, next: 'I have a question… 💖',
       steps: [
         { no: 'No', face: '🧸' },
         { no: 'Are you sure?', face: '🥺' },
@@ -296,11 +381,12 @@
         { no: 'the No button gave up', face: '😮‍💨' },
       ],
       end: 'takeover',
-      done: { title: 'YAAAY!!! 💖', sub: to => withName('I knew you’d say yes', to, ' 🥹'), glyphs: ['💖', '💕', '🌸', '✨', '💗'] },
+      done: { title: 'YAAAY!!! 💖', sub: to => withName('It’s a date', to, ' 🥹'), glyphs: ['💖', '💕', '🌸', '✨', '💗'] },
     },
     runaway: {
       theme: '#ffd9df', yes: 'Yes 💜', floats: ['💜', '💗', '✨', '🌷'],
-      hello: to => to ? `Hey ${to} 💜` : '',
+      hello: to => `Hey ${to} 💜`,
+      poemHello: to => `For ${to} 💜`, next: 'I have a question… 💜',
       steps: [
         { no: 'No', face: '😏' },
         { no: 'Nope 😜', face: '😜', hint: 'hehe, too slow' },
@@ -319,7 +405,8 @@
     },
     stars: {
       theme: '#10142f', yes: 'Yes ✨',
-      hello: to => to ? `Hey ${to} ✨` : '',
+      hello: to => `Hey ${to} ✨`,
+      poemHello: to => `For ${to} ✨`, next: 'I have a question… ✨',
       steps: [
         { no: 'No', face: '🌕' },
         { no: 'Are you sure?', face: '🌖', hint: 'the moon is fading…' },
@@ -337,7 +424,8 @@
 
   const qs = new URLSearchParams(location.search);
   const param = (k, max) => (qs.get(k) || '').trim().slice(0, max);
-  const to = param('to', 40), from = param('from', 40), customQ = param('q', 140);
+  const to = param('to', 40) || 'Madison', from = param('from', 40), customQ = param('q', 140);
+  const showPoem = qs.get('poem') !== '0';
   const key = document.documentElement.dataset.v;
   const V = VARIANTS[key];
   const $ = s => document.querySelector(s);
@@ -349,11 +437,14 @@
 
   $('meta[name=theme-color]').content = V.theme;
   $('#hello').textContent = V.hello(to);
-  $('#question').textContent = customQ || 'Will you be my Valentine?';
+  $('#question').textContent = customQ || 'Will you go on a date with me?';
   yesLabel.textContent = V.yes;
   noBtn.textContent = V.steps[0].no;
   mascot.textContent = V.steps[0].face;
   if (key === 'letter' && from) $('#sig').textContent = `— ${from} ♡`;
+  $('#poem-hello').textContent = V.poemHello(to);
+  $('#next').textContent = V.next;
+  if (from) $('#poem-sig').textContent = `— ${from}`;
   new Image().src = GIF; // warm the cache so the "yes" screen is instant
 
   /* ---------- particles ---------- */
@@ -440,14 +531,41 @@
   }
 
   /* ---------- views ---------- */
-  function swap(out, into) {
+  function swap(out, into, then) {
     out.classList.add('leave');
     setTimeout(() => {
       out.hidden = true; out.classList.remove('leave');
       into.hidden = false; into.classList.add('enter');
       setTimeout(() => into.classList.remove('enter'), 650);
+      if (then) then();
     }, reduceMotion ? 0 : 320);
   }
+
+  // The poem writes itself in line by line; the moon blushes on line 2 and the heart melts on the last.
+  const poem = $('#poem');
+  function revealPoem() {
+    const lines = [...poem.querySelectorAll('.line')], next = $('#next');
+    let i = 0, timer = 0;
+    const show = n => {
+      lines[n].classList.add('on');
+      if (n === 1) $('#moon').classList.add('blushing');
+      if (n === lines.length - 1) $('#melt').classList.add('on');
+    };
+    const tick = () => {
+      if (i < lines.length) { show(i++); timer = setTimeout(tick, i < lines.length ? 1600 : 1300); }
+      else next.classList.add('on');
+    };
+    timer = setTimeout(tick, reduceMotion ? 0 : 500);
+    poem.addEventListener('click', () => { // impatient tap: show the rest at once
+      if (i >= lines.length) return;
+      clearTimeout(timer);
+      while (i < lines.length) show(i++);
+      timer = setTimeout(tick, 900);
+    });
+    next.addEventListener('click', () => { buzz(15); swap(poem, ask); });
+  }
+  const first = showPoem ? poem : ask;
+  const begin = () => { if (showPoem) revealPoem(); };
 
   if (key === 'letter') {
     const intro = $('#intro'), env = $('#env');
@@ -457,14 +575,15 @@
       if (env.classList.contains('open')) return;
       env.classList.add('open');
       buzz(20);
-      setTimeout(() => swap(intro, ask), reduceMotion ? 300 : 1250);
+      setTimeout(() => swap(intro, first, begin), reduceMotion ? 300 : 1250);
     };
     env.addEventListener('click', open);
     env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
   } else {
-    ask.hidden = false;
-    ask.classList.add('enter');
-    setTimeout(() => ask.classList.remove('enter'), 650);
+    first.hidden = false;
+    first.classList.add('enter');
+    setTimeout(() => first.classList.remove('enter'), 650);
+    begin();
   }
 
   /* ---------- saying no ---------- */
@@ -556,7 +675,29 @@
     $('#done-sub').textContent = d.sub(to);
     $('#tally').textContent = (V.tally || tally)(noCount);
     if (from) $('#done-sig').textContent = `— ${from} 💕`;
-    $('#share').textContent = from ? `Send ${from} your answer\u00A0💌` : 'Send your answer\u00A0💌';
+    $('#share').textContent = from ? `Snap ${from} your answer\u00A0👻` : 'Snap me your answer\u00A0👻';
+  }
+
+  const PICKS = [['☕', 'Coffee'], ['🍝', 'Dinner'], ['🍦', 'Ice cream'], ['🎬', 'Movie'], ['🌅', 'Sunset walk'], ['✨', 'Surprise me']];
+  let picked = null;
+  for (const [e, label] of PICKS) {
+    const chip = Object.assign(document.createElement('button'), { type: 'button', className: 'chip' });
+    chip.setAttribute('aria-pressed', 'false');
+    chip.append(Object.assign(document.createElement('span'), { className: 'e', textContent: e }), label);
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+      picked = [e, label];
+      buzz(12);
+      const r = chip.getBoundingClientRect();
+      fx.burst(r.left + r.width / 2, r.top + r.height / 2, [e], reduceMotion ? 3 : 10);
+    });
+    $('#picks').append(chip);
+  }
+
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg; t.classList.add('on');
+    setTimeout(() => t.classList.remove('on'), 2600);
   }
 
   yesBtn.addEventListener('click', () => {
@@ -582,12 +723,14 @@
   });
 
   $('#share').addEventListener('click', async () => {
-    const text = customQ ? 'I said YES 💖' : 'YES!! I’ll be your Valentine 💖';
+    let text = customQ ? 'I said YES 💖' : 'YES!! Let’s go on a date 💖';
+    if (picked) text += picked[1] === 'Surprise me' ? ' Surprise me ✨' : ` I pick: ${picked[1].toLowerCase()} ${picked[0]}`;
     if (navigator.share) {
       try { await navigator.share({ text }); return; }
       catch (e) { if (e.name === 'AbortError') return; }
     }
-    location.href = 'sms:?&body=' + encodeURIComponent(text);
+    try { await navigator.clipboard.writeText(text); toast(`Copied! Paste it to ${from || 'me'} on Snapchat 👻`); }
+    catch (e) { location.href = 'sms:?&body=' + encodeURIComponent(text); }
   });
 })();
 </script>
