@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A little question for you 💌</title>
+<meta name="description" content="Tap to open. Choose wisely 😌">
+<meta name="theme-color" content="#8f2145">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ashup1101.github.io/for-you/">
+<meta property="og:title" content="A little question for you 💌">
+<meta property="og:description" content="Tap to open. Choose wisely 😌">
+<meta property="og:image" content="https://ashup1101.github.io/for-you/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // Pick the variant before first paint so the right colours show immediately.
+  (function () {
+    var v = new URLSearchParams(location.search).get('v');
+    document.documentElement.dataset.v = /^(letter|classic|runaway|stars)$/.test(v) ? v : 'letter';
+  })();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* ---------- themes ---------- */
+  [data-v=classic] {
+    --edge: #ffc4d6;
+    --bg: radial-gradient(120% 80% at 15% 0%, #fff3f7 0, transparent 55%), linear-gradient(165deg, #ffd9e5, #ffb8cd 55%, #ff9ab9);
+    --ink: #5c1734; --card: rgba(255,255,255,.55); --card-border: rgba(255,255,255,.75);
+    --yes-bg: linear-gradient(135deg, #ff3d7f, #ff7aa6); --yes-ink: #fff; --yes-glow: rgba(255,61,127,.45);
+    --no-bg: #fff; --no-ink: #b4416b;
+  }
+  [data-v=runaway] {
+    --edge: #ffd9df;
+    --bg: radial-gradient(100% 70% at 85% 0%, #fff1e6 0, transparent 55%), linear-gradient(160deg, #ffe3d3, #ffcfe6 50%, #d6c7ff);
+    --ink: #3b2356; --card: rgba(255,255,255,.55); --card-border: rgba(255,255,255,.75);
+    --yes-bg: linear-gradient(135deg, #8b5cf6, #ec4899); --yes-ink: #fff; --yes-glow: rgba(139,92,246,.42);
+    --no-bg: #fff; --no-ink: #7a55a3;
+  }
+  [data-v=letter] {
+    --edge: #8f2145;
+    --bg: radial-gradient(90% 60% at 50% 0%, #e45c83 0, transparent 70%), linear-gradient(170deg, #b0284f, #7d1a3a);
+    --ink: #3a2626; --paper: #fffaf1;
+    --yes-bg: #c1121f; --yes-ink: #fff4f0; --yes-glow: rgba(120,0,20,.35);
+    --no-bg: transparent; --no-ink: #9a3b46;
+  }
+  [data-v=stars] {
+    --edge: #10142f;
+    --bg: radial-gradient(120% 70% at 50% 0%, #3a2b6e 0, #151b42 45%, #070a1c 100%);
+    --ink: #f3ecff; --card: rgba(255,255,255,.06); --card-border: rgba(255,255,255,.14);
+    --yes-bg: linear-gradient(135deg, #ffd166, #ff8fab); --yes-ink: #2a1240; --yes-glow: rgba(255,209,102,.45);
+    --no-bg: rgba(255,255,255,.1); --no-ink: #e4dcff;
+  }
+
+  /* ---------- base ---------- */
+  html { background: var(--edge); -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+  body {
+    margin: 0; min-height: 100vh; min-height: 100dvh;
+    font-family: "Fredoka", ui-rounded, system-ui, sans-serif; color: var(--ink);
+    overflow-x: hidden; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased;
+  }
+  .bg, .floats, .sky, .shade, .glow { position: fixed; inset: 0; pointer-events: none; }
+  .bg { background: var(--bg); }
+  .floats { overflow: hidden; }
+  .float { position: absolute; bottom: -60px; line-height: 1; animation: rise linear infinite; }
+  @keyframes rise { to { translate: var(--dx) calc(-100vh - 140px); rotate: 25deg; } }
+  [data-v=letter] .float { color: #ffd0dc; }
+
+  .stage {
+    position: relative; z-index: 1; min-height: 100vh; min-height: 100dvh;
+    display: grid; place-items: center; overflow-x: hidden; overflow-x: clip;
+    padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  .view[hidden] { display: none !important; }
+  .enter { animation: enter .6s cubic-bezier(.2,.9,.3,1.15) both; }
+  .leave { animation: leave .32s ease both; }
+  @keyframes enter { from { opacity: 0; translate: 0 26px; scale: .96; } }
+  @keyframes leave { to { opacity: 0; } }
+
+  /* ---------- card ---------- */
+  .card {
+    position: relative; width: min(100%, 420px); text-align: center;
+    padding: 30px 22px 32px; border-radius: 30px;
+    background: var(--card); border: 1px solid var(--card-border);
+    box-shadow: 0 20px 60px rgba(80,10,40,.18); isolation: isolate;
+  }
+  .card::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+  .mascot { display: inline-block; font-size: clamp(76px, 24vw, 104px); line-height: 1.05; animation: bob 2.6s ease-in-out infinite; }
+  .mascot.pop { animation: pop .5s cubic-bezier(.3,1.6,.5,1), bob 2.6s ease-in-out .5s infinite; }
+  @keyframes bob { 50% { translate: 0 -8px; } }
+  @keyframes pop { from { scale: .55; } }
+  .hello { margin: 12px 0 0; font-size: 1.08rem; font-weight: 500; opacity: .75; }
+  .hello:empty, .sig:empty { display: none; }
+  .question { margin: 6px 0 10px; font-size: clamp(1.75rem, 7.6vw, 2.3rem); font-weight: 600; line-height: 1.15; text-wrap: balance; }
+  .hint { min-height: 1.35em; margin: 0 0 16px; font-size: 1rem; opacity: .72; }
+  .sig { margin: 18px 0 0; text-align: right; font-size: 1.8rem; }
+
+  /* ---------- buttons ---------- */
+  .buttons { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 14px; }
+  .btn {
+    font: inherit; font-weight: 600; border: 0; border-radius: 999px; cursor: pointer;
+    -webkit-user-select: none; user-select: none; line-height: 1.1;
+    transition: font-size .3s cubic-bezier(.3,1.4,.5,1), opacity .35s, scale .35s;
+  }
+  .btn:active { scale: .95; }
+  .yes span { white-space: nowrap; }
+  .yes { font-size: 19px; padding: .62em 1.5em; background: var(--yes-bg); color: var(--yes-ink); box-shadow: 0 10px 24px -6px var(--yes-glow); }
+  .no { font-size: 17px; padding: .72em 1.3em; background: var(--no-bg); color: var(--no-ink); max-width: min(80vw, 300px); box-shadow: 0 4px 14px -6px rgba(0,0,0,.15); }
+  .no.fly { position: fixed; left: 0; top: 0; z-index: 30; transition: translate .38s cubic-bezier(.34,1.56,.64,1), font-size .3s, opacity .35s, scale .35s; }
+  .no.gone { opacity: 0; scale: .2; pointer-events: none; }
+  .yes.takeover {
+    position: fixed; inset: 0; z-index: 40; border-radius: 0; padding: 24px; box-shadow: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: clamp(56px, 20vw, 120px) !important;
+  }
+  .yes.takeover span { animation: throb 1.2s ease-in-out infinite; }
+  .yes.takeover::after { content: "(it was always going to be yes)"; font-size: 18px; font-weight: 500; opacity: .85; margin-top: 14px; }
+  @keyframes throb { 50% { scale: 1.08; } }
+
+  /* ---------- done ---------- */
+  .art { display: block; width: 180px; height: 180px; object-fit: contain; margin: 0 auto; }
+  .art-emoji { font-size: 110px; line-height: 1.2; }
+  .done-title { margin: 10px 0 6px; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.1; }
+  .done-sub { margin: 0 0 6px; font-size: 1.15rem; }
+  .tally { margin: 0 0 22px; font-size: .98rem; opacity: .7; }
+  .share { max-width: 100%; font-size: 18px; padding: .75em 1.5em; background: var(--yes-bg); color: var(--yes-ink); box-shadow: 0 10px 24px -6px var(--yes-glow); }
+  .stamp { display: none; }
+
+  /* ---------- letter ---------- */
+  .intro { display: grid; justify-items: center; gap: 26px; }
+  .env { position: relative; width: min(80vw, 330px); aspect-ratio: 3 / 2; cursor: pointer; perspective: 900px; filter: drop-shadow(0 18px 30px rgba(60,0,20,.4)); animation: bob 3s ease-in-out infinite; outline: none; }
+  .env > div { position: absolute; }
+  .env-back { inset: 0; background: #e8c0ad; border-radius: 10px; }
+  .env-paper {
+    left: 7%; right: 7%; top: 6%; height: 88%; z-index: 1; border-radius: 6px;
+    background: var(--paper); display: grid; place-items: center;
+    font: 700 3rem/1 "Caveat", cursive; color: #c1121f;
+    transition: translate .7s cubic-bezier(.2,.8,.2,1) .35s;
+  }
+  .env-pocket { inset: 0; z-index: 2; border-radius: 10px; background: linear-gradient(to top, #f9e3d7, #f3d3c3); clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%); }
+  .env-flap { left: 0; right: 0; top: 0; height: 62%; z-index: 3; background: #f1cbb8; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transition: transform .5s ease, z-index 0s linear .25s; }
+  .env-seal { left: 50%; top: 62%; width: 54px; height: 54px; margin: -27px 0 0 -27px; z-index: 4; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 35%, #e5383b, #a4161a); color: #ffd6dc; font-size: 24px; box-shadow: 0 3px 8px rgba(0,0,0,.25); transition: opacity .25s, scale .25s; }
+  .env-to { left: 0; right: 0; bottom: 9%; z-index: 4; text-align: center; font: 700 1.8rem/1 "Caveat", cursive; color: #9b2c3f; transition: opacity .25s; }
+  .env.open { animation: none; }
+  .env.open .env-flap { transform: rotateX(180deg); z-index: 0; }
+  .env.open .env-seal { opacity: 0; scale: .6; }
+  .env.open .env-to { opacity: 0; }
+  .env.open .env-paper { translate: 0 -55%; }
+  .tap { margin: 0; font: 700 1.7rem/1 "Caveat", cursive; color: #ffe3ea; animation: breathe 1.6s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .45; } }
+
+  [data-v=letter] .card {
+    font-family: "Caveat", cursive; text-align: left; border: 0; border-radius: 4px; rotate: -1.2deg;
+    padding: 30px 24px 26px 46px;
+    background:
+      linear-gradient(90deg, transparent 30px, rgba(214,69,96,.35) 30px 32px, transparent 32px),
+      repeating-linear-gradient(transparent 0 33px, rgba(120,140,190,.22) 33px 34px),
+      var(--paper);
+    box-shadow: 0 2px 0 #eadfcf, 0 24px 60px rgba(50,0,15,.45);
+  }
+  [data-v=letter] .card::before { display: none; }
+  [data-v=letter] .mascot { position: absolute; top: -30px; right: -6px; font-size: 60px; rotate: 12deg; }
+  [data-v=letter] .hello { margin: 0; font-size: 2rem; opacity: .9; }
+  [data-v=letter] .question { margin: 12px 0 8px; text-align: center; font-size: clamp(2.5rem, 11.5vw, 3.1rem); font-weight: 700; line-height: 1; color: #a3122a; }
+  [data-v=letter] .hint { text-align: center; font-size: 1.4rem; }
+  [data-v=letter] .btn { font-family: "Caveat", cursive; font-weight: 700; }
+  [data-v=letter] .yes, [data-v=letter] .share { border-radius: 10px; font-size: 26px; padding: .3em 1.2em; }
+  [data-v=letter] .share { font-size: 23px; padding: .3em .9em; }
+  [data-v=letter] .no { border: 2px dashed currentColor; border-radius: 10px; font-size: 23px; padding: .25em .9em; box-shadow: none; }
+  [data-v=letter] .done { text-align: center; }
+  [data-v=letter] .done-title { color: #a3122a; font-size: clamp(2.4rem, 11vw, 3rem); }
+  [data-v=letter] .done-sub { font-size: 1.6rem; }
+  [data-v=letter] .tally { font-size: 1.35rem; }
+  [data-v=letter] .stamp {
+    display: block; position: absolute; top: -16px; right: -8px; rotate: 9deg; padding: 6px 10px;
+    border: 2.5px solid #c1121f; border-radius: 8px; background: rgba(255,250,241,.92); color: #c1121f;
+    font: 700 .72rem/1.25 "Fredoka", sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  }
+
+  /* ---------- midnight ---------- */
+  .sky { opacity: var(--sky, 1); transition: opacity .9s; }
+  .shade { background: #000; opacity: calc((1 - var(--sky, 1)) * .55); transition: opacity .9s; }
+  .glow { opacity: 0; transition: opacity 1.4s; background: radial-gradient(80% 50% at 50% 100%, rgba(255,143,171,.35), transparent 70%), radial-gradient(60% 40% at 50% 0%, rgba(255,209,102,.18), transparent 70%); }
+  .lit .glow { opacity: 1; }
+  .star { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(255,255,255,.8); animation: twinkle ease-in-out infinite; }
+  @keyframes twinkle { 50% { opacity: .25; scale: .7; } }
+  .shoot { position: absolute; width: 120px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff, transparent); rotate: -25deg; opacity: 0; animation: shoot 9s linear infinite; }
+  @keyframes shoot { 2% { opacity: 1; } 12%, 100% { opacity: 0; translate: -320px 150px; } }
+  [data-v=stars] .mascot, [data-v=stars] .art-emoji { filter: drop-shadow(0 0 24px rgba(255,236,170,.55)); }
+  [data-v=stars] .question { text-shadow: 0 0 18px rgba(205,180,255,.55); }
+  [data-v=stars] .no { border: 1px solid rgba(255,255,255,.22); }
+
+  #fx { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floats, .shoot { display: none; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="floats" id="floats" aria-hidden="true"></div>
+<div class="sky" id="sky" aria-hidden="true"></div>
+<div class="shade" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+
+<main class="stage">
+  <section class="view intro" id="intro" hidden>
+    <div class="env" id="env" role="button" tabindex="0" aria-label="Open the letter">
+      <div class="env-back"></div>
+      <div class="env-paper">&#9825;</div>
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="env-seal">&#9829;&#xFE0E;</div>
+      <div class="env-to" id="env-to"></div>
+    </div>
+    <p class="tap">tap to open</p>
+  </section>
+
+  <section class="view card" id="ask" hidden>
+    <div class="mascot" id="mascot" aria-hidden="true"></div>
+    <p class="hello" id="hello"></p>
+    <h1 class="question" id="question"></h1>
+    <p class="hint" id="hint" aria-live="polite"></p>
+    <div class="buttons">
+      <button class="btn yes" id="yes" type="button"><span id="yes-label">Yes</span></button>
+      <button class="btn no" id="no" type="button">No</button>
+    </div>
+    <p class="sig" id="sig"></p>
+  </section>
+
+  <section class="view card done" id="done" hidden>
+    <div class="stamp" aria-hidden="true">Sealed with<br>a kiss 💋</div>
+    <img class="art" id="art" alt="Two cartoon bears kissing" width="180" height="180">
+    <h2 class="done-title" id="done-title"></h2>
+    <p class="done-sub" id="done-sub"></p>
+    <p class="tally" id="tally"></p>
+    <button class="btn share" id="share" type="button">Send your answer 💌</button>
+    <p class="sig" id="done-sig"></p>
+  </section>
+</main>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script>
+(() => {
+  const GIF = 'https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif';
+  const withName = (s, to, end) => s + (to ? ', ' + to : '') + end;
+  const tally = n => n === 0 ? 'First try. Zero hesitation. 😌'
+    : n === 1 ? 'Only one “no” first… I’ll allow it 😤'
+    : `Only took ${n} “no”s… but who’s counting 😤`;
+
+  // Each step is what the No button says (and the face shown) after that many "no"s.
+  const VARIANTS = {
+    letter: {
+      theme: '#8f2145', yes: 'Yes ♡', floats: ['♥︎', '♡', '❥'], shrinkNo: true,
+      hello: to => `Dear ${to || 'you'},`,
+      steps: [
+        { no: 'No', face: '🥰' },
+        { no: 'Are you sure?', face: '🥺' },
+        { no: 'Read it again ♡', face: '🥺' },
+        { no: 'Pretty please?', face: '🙏', hint: '(the “no” is getting smaller…)' },
+        { no: 'I’ll write you 100 letters', face: '✍️' },
+        { no: '…and bake you cookies 🍪', face: '🍪' },
+        { no: 'My ink is running 🥲', face: '🥲' },
+        { no: 'please', face: '😢', hint: '(it’s almost gone)' },
+        { no: 'no (barely)', face: '😭' },
+        { no: 'n o', face: '😶' },
+      ],
+      end: 'vanish', endHint: '(the “no” fell off the page)', endFace: '😌',
+      done: { title: 'Signed, sealed, yours ♡', sub: to => withName('Best reply I’ve ever gotten', to, '.'), glyphs: ['💌', '❤️', '💋', '🌹'] },
+    },
+    classic: {
+      theme: '#ffc4d6', yes: 'Yes 💖', floats: ['💗', '💕', '💖', '🌸'],
+      hello: to => to ? `Hey ${to} 💕` : '',
+      steps: [
+        { no: 'No', face: '🧸' },
+        { no: 'Are you sure?', face: '🥺' },
+        { no: 'Really sure??', face: '😳' },
+        { no: 'What if I asked nicely?', face: '🙏' },
+        { no: 'Pretty please 🍓', face: '🥹' },
+        { no: 'With chocolate on top? 🍫', face: '🤤' },
+        { no: 'I’ll get you boba 🧋', face: '😋' },
+        { no: 'You’re breaking my heart 💔', face: '😢' },
+        { no: 'I’m actually crying rn', face: '😭' },
+        { no: 'ok I’m dead now', face: '💀' },
+        { no: 'you’re talking to my ghost 👻', face: '👻' },
+        { no: 'PLEASE 👉👈', face: '🥺' },
+        { no: 'the No button gave up', face: '😮‍💨' },
+      ],
+      end: 'takeover',
+      done: { title: 'YAAAY!!! 💖', sub: to => withName('I knew you’d say yes', to, ' 🥹'), glyphs: ['💖', '💕', '🌸', '✨', '💗'] },
+    },
+    runaway: {
+      theme: '#ffd9df', yes: 'Yes 💜', floats: ['💜', '💗', '✨', '🌷'],
+      hello: to => to ? `Hey ${to} 💜` : '',
+      steps: [
+        { no: 'No', face: '😏' },
+        { no: 'Nope 😜', face: '😜', hint: 'hehe, too slow' },
+        { no: 'Missed!', face: '🙈' },
+        { no: 'Catch me 🏃', face: '😆' },
+        { no: 'Not today', face: '😝' },
+        { no: 'So close!', face: '🤭', hint: 'psst… the other button is right there' },
+        { no: 'Try harder 😝', face: '😂' },
+        { no: 'Still no?', face: '🫣' },
+        { no: 'I’m getting tired…', face: '🥵' },
+        { no: 'ok fine 😮‍💨', face: '😮‍💨' },
+      ],
+      end: 'vanish', endHint: 'The No button ran away for good 🏃💨', endFace: '😌',
+      tally: n => n === 0 ? 'Didn’t even chase the No button 😌' : `You chased the No button ${n} time${n > 1 ? 's' : ''} 😂`,
+      done: { title: 'Caught you 😌💜', sub: to => withName('Best decision you’ve made all day', to, '.'), glyphs: ['💜', '💗', '✨', '🌷', '🦋'] },
+    },
+    stars: {
+      theme: '#10142f', yes: 'Yes ✨',
+      hello: to => to ? `Hey ${to} ✨` : '',
+      steps: [
+        { no: 'No', face: '🌕' },
+        { no: 'Are you sure?', face: '🌖', hint: 'the moon is fading…' },
+        { no: 'Look up first 🔭', face: '🌗' },
+        { no: 'Even the stars are sad', face: '🌘', hint: 'it’s getting dark out here' },
+        { no: 'I can barely see you', face: '🌑' },
+        { no: 'Hello? Anyone? 🔦', face: '🌚' },
+        { no: 'Make a wish instead ⭐', face: '🌚', hint: 'one “yes” brings the light back ✨' },
+        { no: '…', face: '🌚' },
+      ],
+      end: 'vanish', endHint: 'the No button got lost in the dark 🌑',
+      done: { emoji: '🌝', title: 'The stars said yes too ✨', sub: to => withName('You just lit up my whole sky', to, ' 💫') },
+    },
+  };
+
+  const qs = new URLSearchParams(location.search);
+  const param = (k, max) => (qs.get(k) || '').trim().slice(0, max);
+  const to = param('to', 40), from = param('from', 40), customQ = param('q', 140);
+  const key = document.documentElement.dataset.v;
+  const V = VARIANTS[key];
+  const $ = s => document.querySelector(s);
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const buzz = p => navigator.vibrate && navigator.vibrate(p);
+
+  const ask = $('#ask'), done = $('#done'), mascot = $('#mascot'), hint = $('#hint'),
+        yesBtn = $('#yes'), yesLabel = $('#yes-label'), noBtn = $('#no');
+
+  $('meta[name=theme-color]').content = V.theme;
+  $('#hello').textContent = V.hello(to);
+  $('#question').textContent = customQ || 'Will you be my Valentine?';
+  yesLabel.textContent = V.yes;
+  noBtn.textContent = V.steps[0].no;
+  mascot.textContent = V.steps[0].face;
+  if (key === 'letter' && from) $('#sig').textContent = `— ${from} ♡`;
+  new Image().src = GIF; // warm the cache so the "yes" screen is instant
+
+  /* ---------- particles ---------- */
+  const fx = (() => {
+    const c = $('#fx'), ctx = c.getContext('2d');
+    let parts = [], raf = 0, prev = 0;
+    const size = () => {
+      const d = Math.min(devicePixelRatio || 1, 2);
+      c.width = innerWidth * d; c.height = innerHeight * d;
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    };
+    size(); addEventListener('resize', size);
+    const frame = t => {
+      const k = Math.min((t - (prev || t)) / 16.7, 3) || 1; prev = t;
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      parts = parts.filter(p => (p.life -= k) > 0 && p.y < innerHeight + 60);
+      for (const p of parts) {
+        const f = Math.pow(p.drag, k);
+        p.vy += p.g * k; p.vx *= f; p.vy *= f;
+        p.x += p.vx * k; p.y += p.vy * k; p.rot += p.spin * k;
+        ctx.globalAlpha = Math.min(1, p.life / 25);
+        if (p.glyph) {
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+          ctx.font = p.size + 'px serif'; ctx.fillText(p.glyph, 0, 0); ctx.restore();
+        } else {
+          ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, 6.283); ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+      if (parts.length) raf = requestAnimationFrame(frame); else raf = prev = 0;
+    };
+    const add = p => { parts.push(Object.assign({ g: .3, drag: .985, spin: 0, rot: 0, life: 120 }, p)); if (!raf) raf = requestAnimationFrame(frame); };
+    const pick = a => a[Math.random() * a.length | 0];
+    return {
+      burst(x, y, glyphs, n) {
+        for (let i = 0; i < n; i++) {
+          const a = Math.random() * Math.PI * 2, s = 4 + Math.random() * 9;
+          add({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 6, glyph: pick(glyphs), size: 18 + Math.random() * 16, spin: (Math.random() - .5) * .2, life: 100 + Math.random() * 60 });
+        }
+      },
+      rain(glyphs, n) {
+        for (let i = 0; i < n; i++) {
+          add({ x: Math.random() * innerWidth, y: -40 - Math.random() * innerHeight * .8, vx: (Math.random() - .5) * 1.2, vy: 1.5 + Math.random() * 2, g: .015, drag: 1, glyph: pick(glyphs), size: 16 + Math.random() * 14, spin: (Math.random() - .5) * .05, life: 420 });
+        }
+      },
+      heart(x, y, color) {
+        for (let i = 0; i < 56; i++) {
+          const t = i / 56 * Math.PI * 2;
+          const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+          add({ x, y, vx: Math.sin(t) ** 3 * 5.5, vy: -hy / 16 * 5.5, g: .03, drag: .955, color, size: 2.2, life: 75 + Math.random() * 25 });
+        }
+      },
+    };
+  })();
+
+  /* ---------- backgrounds ---------- */
+  if (V.floats) {
+    const layer = $('#floats'), n = innerWidth < 500 ? 14 : 22;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('span'), dur = 10 + Math.random() * 10;
+      s.className = 'float';
+      s.textContent = V.floats[i % V.floats.length];
+      Object.assign(s.style, { left: Math.random() * 100 + '%', fontSize: 14 + Math.random() * 22 + 'px', opacity: .3 + Math.random() * .45, animationDuration: dur + 's', animationDelay: -Math.random() * dur + 's' });
+      s.style.setProperty('--dx', (Math.random() - .5) * 90 + 'px');
+      layer.appendChild(s);
+    }
+  }
+  const setSky = b => document.body.style.setProperty('--sky', b);
+  if (key === 'stars') {
+    const sky = $('#sky'), n = innerWidth < 500 ? 70 : 120;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('i'), size = Math.random() < .85 ? 1 + Math.random() * 1.5 : 2.5 + Math.random();
+      s.className = 'star';
+      Object.assign(s.style, { left: Math.random() * 100 + '%', top: Math.random() * 100 + '%', width: size + 'px', height: size + 'px', animationDuration: 2 + Math.random() * 4 + 's', animationDelay: -Math.random() * 6 + 's' });
+      sky.appendChild(s);
+    }
+    for (let i = 0; i < 2; i++) {
+      const s = document.createElement('i');
+      s.className = 'shoot';
+      Object.assign(s.style, { top: 8 + Math.random() * 30 + '%', left: 30 + Math.random() * 60 + '%', animationDelay: 2 + i * 5 + Math.random() * 3 + 's' });
+      sky.appendChild(s);
+    }
+  }
+
+  /* ---------- views ---------- */
+  function swap(out, into) {
+    out.classList.add('leave');
+    setTimeout(() => {
+      out.hidden = true; out.classList.remove('leave');
+      into.hidden = false; into.classList.add('enter');
+      setTimeout(() => into.classList.remove('enter'), 650);
+    }, reduceMotion ? 0 : 320);
+  }
+
+  if (key === 'letter') {
+    const intro = $('#intro'), env = $('#env');
+    $('#env-to').textContent = to ? `For ${to}` : 'For you';
+    intro.hidden = false;
+    const open = () => {
+      if (env.classList.contains('open')) return;
+      env.classList.add('open');
+      buzz(20);
+      setTimeout(() => swap(intro, ask), reduceMotion ? 300 : 1250);
+    };
+    env.addEventListener('click', open);
+    env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  } else {
+    ask.hidden = false;
+    ask.classList.add('enter');
+    setTimeout(() => ask.classList.remove('enter'), 650);
+  }
+
+  /* ---------- saying no ---------- */
+  let noCount = 0, finished = false;
+  const yesBase = parseFloat(getComputedStyle(yesBtn).fontSize);
+  const noBase = parseFloat(getComputedStyle(noBtn).fontSize);
+
+  function setFace(f) {
+    if (!f || mascot.textContent === f) return;
+    mascot.textContent = f;
+    mascot.classList.remove('pop'); void mascot.offsetWidth; mascot.classList.add('pop');
+  }
+
+  function sayNo() {
+    if (finished) return;
+    noCount++;
+    buzz(12);
+    const max = Math.max(yesBase, Math.min(innerWidth * .12, 64));
+    yesBtn.style.fontSize = Math.min(yesBase + noCount * 4.5, max) + 'px';
+    if (key === 'stars') setSky(Math.max(.12, 1 - noCount * .12));
+    if (noCount >= V.steps.length) return giveUp();
+    const step = V.steps[noCount];
+    noBtn.textContent = step.no;
+    setFace(step.face);
+    if (step.hint) hint.textContent = step.hint;
+    if (V.shrinkNo) noBtn.style.fontSize = Math.max(noBase * (1 - noCount * .08), 11) + 'px';
+  }
+
+  // Ran out of "no" lines: the No button leaves and only Yes is left.
+  function giveUp() {
+    finished = true;
+    noBtn.classList.add('gone');
+    if (V.end === 'takeover') {
+      yesBtn.classList.add('takeover');
+      yesLabel.textContent = 'YES 💖';
+      return;
+    }
+    hint.textContent = V.endHint;
+    setFace(V.endFace);
+  }
+
+  function flyNo() {
+    const r = noBtn.getBoundingClientRect();
+    if (!noBtn.classList.contains('fly')) {
+      // Pin it where it is first, so the jump animates from its real spot.
+      noBtn.style.transition = 'none';
+      noBtn.classList.add('fly');
+      noBtn.style.translate = `${r.left}px ${r.top}px`;
+      void noBtn.offsetWidth;
+      noBtn.style.transition = '';
+    }
+    const w = noBtn.offsetWidth, h = noBtn.offsetHeight, m = 18, top = 60, bottom = 50;
+    const keepOut = yesBtn.getBoundingClientRect();
+    let x = r.left, y = r.top;
+    for (let i = 0; i < 25; i++) {
+      x = m + Math.random() * Math.max(0, innerWidth - w - 2 * m);
+      y = top + Math.random() * Math.max(0, innerHeight - h - top - bottom);
+      const hitsYes = x < keepOut.right + 12 && x + w > keepOut.left - 12 && y < keepOut.bottom + 12 && y + h > keepOut.top - 12;
+      if (!hitsYes && Math.hypot(x - r.left, y - r.top) > 110) break;
+    }
+    noBtn.style.translate = `${x}px ${y}px`;
+  }
+
+  if (key === 'runaway') {
+    let last = 0;
+    const dodge = e => {
+      if (e.cancelable) e.preventDefault();
+      const now = Date.now();
+      if (finished || now - last < 250) return;
+      last = now;
+      sayNo();
+      if (!finished) flyNo();
+    };
+    noBtn.addEventListener('touchstart', dodge, { passive: false });
+    noBtn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') dodge(e); });
+    noBtn.addEventListener('click', dodge);
+    addEventListener('resize', () => { if (!finished && noBtn.classList.contains('fly')) flyNo(); });
+  } else {
+    noBtn.addEventListener('click', sayNo);
+  }
+
+  /* ---------- saying yes ---------- */
+  function fillDone() {
+    const d = V.done, art = $('#art');
+    const emojiArt = e => Object.assign(document.createElement('div'), { className: 'art-emoji', textContent: e });
+    if (d.emoji) art.replaceWith(emojiArt(d.emoji));
+    else { art.onerror = () => art.replaceWith(emojiArt('💞')); art.src = GIF; }
+    $('#done-title').textContent = d.title;
+    $('#done-sub').textContent = d.sub(to);
+    $('#tally').textContent = (V.tally || tally)(noCount);
+    if (from) $('#done-sig').textContent = `— ${from} 💕`;
+    $('#share').textContent = from ? `Send ${from} your answer\u00A0💌` : 'Send your answer\u00A0💌';
+  }
+
+  yesBtn.addEventListener('click', () => {
+    const r = yesBtn.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = Math.min(r.top + r.height / 2, innerHeight * .6);
+    finished = true;
+    buzz([30, 60, 30, 60, 90]);
+    document.title = 'YES 💖';
+    fillDone();
+    swap(ask, done);
+    if (key === 'stars') {
+      setSky(1);
+      document.body.classList.add('lit');
+      const colors = ['#ffd166', '#ff8fab', '#cdb4ff', '#9bf6ff', '#ff5d8f', '#ffffff'];
+      const shots = reduceMotion ? 2 : 9;
+      for (let i = 0; i < shots; i++) {
+        setTimeout(() => fx.heart(innerWidth * (.18 + Math.random() * .64), innerHeight * (.14 + Math.random() * .4), colors[i % colors.length]), i * 380);
+      }
+    } else {
+      fx.burst(x, y, V.done.glyphs, reduceMotion ? 14 : 46);
+      if (!reduceMotion) setTimeout(() => fx.rain(V.done.glyphs, 36), 350);
+    }
+  });
+
+  $('#share').addEventListener('click', async () => {
+    const text = customQ ? 'I said YES 💖' : 'YES!! I’ll be your Valentine 💖';
+    if (navigator.share) {
+      try { await navigator.share({ text }); return; }
+      catch (e) { if (e.name === 'AbortError') return; }
+    }
+    location.href = 'sms:?&body=' + encodeURIComponent(text);
+  });
+})();
+</script>
+</body>
+</html>

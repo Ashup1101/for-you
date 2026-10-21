@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Make your own 💌</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffd6e2">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: #ffd6e2; -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+  body {
+    margin: 0; min-height: 100dvh; color: #4a1a33;
+    font-family: "Fredoka", ui-rounded, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
+    background: radial-gradient(120% 60% at 10% 0%, #fff4f8 0, transparent 60%), linear-gradient(170deg, #ffe0ea, #ffc7d8 60%, #f9b3cb);
+    background-attachment: fixed;
+  }
+  .wrap {
+    width: min(100%, 520px); margin: 0 auto;
+    padding: max(28px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  header { text-align: center; margin-bottom: 22px; }
+  .logo { font-size: 64px; line-height: 1; }
+  h1 { margin: 8px 0 6px; font-size: 2rem; font-weight: 600; }
+  header p { margin: 0; opacity: .75; }
+  .panel { background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.8); border-radius: 24px; padding: 18px; box-shadow: 0 16px 40px rgba(120,20,60,.12); }
+  .field { display: block; margin-bottom: 14px; }
+  .field span, legend { display: block; margin-bottom: 6px; font-weight: 600; font-size: .95rem; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 16px; color: inherit; padding: 13px 14px;
+    border: 1.5px solid #f3b6c9; border-radius: 14px; background: #fff; outline: none;
+  }
+  input[type=text]:focus { border-color: #ff3d7f; box-shadow: 0 0 0 4px rgba(255,61,127,.15); }
+  fieldset { border: 0; padding: 0; margin: 6px 0 0; }
+  .styles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .styles legend { grid-column: 1 / -1; }
+  .style { position: relative; display: block; padding: 12px; border-radius: 18px; background: #fff; border: 2px solid transparent; cursor: pointer; }
+  .style:has(input:checked) { border-color: #ff3d7f; box-shadow: 0 6px 18px rgba(255,61,127,.2); }
+  .style input { position: absolute; opacity: 0; pointer-events: none; }
+  .swatch { display: grid; place-items: center; height: 58px; border-radius: 12px; font-size: 30px; margin-bottom: 8px; }
+  .s-letter { background: linear-gradient(170deg, #b0284f, #7d1a3a); }
+  .s-classic { background: linear-gradient(165deg, #ffd9e5, #ff9ab9); }
+  .s-runaway { background: linear-gradient(160deg, #ffe3d3, #ffcfe6 50%, #d6c7ff); }
+  .s-stars { background: radial-gradient(120% 90% at 50% 0%, #3a2b6e, #070a1c); }
+  .style b { display: block; font-weight: 600; }
+  .style small { display: block; margin-top: 2px; font-size: .8rem; line-height: 1.3; opacity: .7; }
+  .out { margin-top: 18px; }
+  .link { display: block; padding: 14px; border-radius: 14px; background: #fff; color: #b0284f; font-size: .9rem; word-break: break-all; text-decoration: none; border: 1.5px dashed #f3b6c9; }
+  .actions { display: flex; gap: 10px; margin-top: 12px; }
+  .actions > * {
+    flex: 1; display: grid; place-items: center; font: inherit; font-weight: 600; font-size: 16px; padding: 13px 10px;
+    border: 0; border-radius: 999px; cursor: pointer; text-decoration: none; -webkit-user-select: none; user-select: none;
+  }
+  .actions > [hidden] { display: none; }
+  #copy { background: linear-gradient(135deg, #ff3d7f, #ff7aa6); color: #fff; box-shadow: 0 10px 22px -8px rgba(255,61,127,.6); }
+  #share, #preview { background: #fff; color: #b4416b; }
+  .actions > *:active { scale: .97; }
+  .note { margin: 14px 4px 0; font-size: .85rem; opacity: .65; text-align: center; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="logo">💌</div>
+    <h1>Make your own</h1>
+    <p>Fill it in, pick a style, send the link.</p>
+  </header>
+
+  <form class="panel" id="form" autocomplete="off" onsubmit="return false">
+    <label class="field"><span>Who’s it for?</span><input type="text" name="to" maxlength="40" placeholder="Their name"></label>
+    <label class="field"><span>From</span><input type="text" name="from" maxlength="40" placeholder="Your name (optional)"></label>
+    <label class="field"><span>The question</span><input type="text" name="q" maxlength="140" placeholder="Will you be my Valentine?"></label>
+    <fieldset class="styles">
+      <legend>Pick a style</legend>
+      <label class="style"><input type="radio" name="v" value="letter" checked><span class="swatch s-letter">💌</span><b>Love letter</b><small>Opens from an envelope. The “no” shrinks off the page.</small></label>
+      <label class="style"><input type="radio" name="v" value="classic"><span class="swatch s-classic">🧸</span><b>Blush</b><small>The original: “no” begs, “yes” takes over the screen.</small></label>
+      <label class="style"><input type="radio" name="v" value="runaway"><span class="swatch s-runaway">🏃</span><b>Catch me</b><small>The “no” button dodges every tap.</small></label>
+      <label class="style"><input type="radio" name="v" value="stars"><span class="swatch s-stars">🌙</span><b>Midnight</b><small>Every “no” dims the moon. “Yes” sets off fireworks.</small></label>
+    </fieldset>
+  </form>
+
+  <section class="out">
+    <a class="link" id="link" target="_blank" rel="noopener"></a>
+    <div class="actions">
+      <button id="copy" type="button">Copy link</button>
+      <button id="share" type="button" hidden>Share</button>
+      <a id="preview" target="_blank" rel="noopener">Preview</a>
+    </div>
+    <p class="note">Everything lives in the link itself, so nothing gets saved anywhere.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  const form = document.getElementById('form'), link = document.getElementById('link'),
+        copyBtn = document.getElementById('copy'), shareBtn = document.getElementById('share'),
+        preview = document.getElementById('preview');
+  const base = new URL('./', location.href);
+  const KEY = 'for-you:builder';
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+    for (const [k, val] of Object.entries(saved)) {
+      const el = form.elements[k];
+      if (el && typeof val === 'string') el.value = val;
+    }
+  } catch (e) {}
+
+  function build() {
+    const data = new FormData(form), url = new URL(base);
+    url.searchParams.set('v', data.get('v') || 'letter');
+    for (const k of ['to', 'from', 'q']) {
+      const val = String(data.get(k) || '').trim();
+      if (val) url.searchParams.set(k, val);
+    }
+    return url.href;
+  }
+
+  function render() {
+    const href = build();
+    link.href = preview.href = href;
+    link.textContent = href.replace(/^https?:\/\//, '');
+    try { localStorage.setItem(KEY, JSON.stringify(Object.fromEntries(new FormData(form)))); } catch (e) {}
+  }
+
+  form.addEventListener('input', render);
+  form.addEventListener('change', render);
+  render();
+
+  copyBtn.addEventListener('click', async () => {
+    const href = build();
+    try { await navigator.clipboard.writeText(href); }
+    catch (e) {
+      const t = Object.assign(document.createElement('textarea'), { value: href });
+      document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove();
+    }
+    copyBtn.textContent = 'Copied ✓';
+    setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 1600);
+  });
+
+  if (navigator.share) {
+    shareBtn.hidden = false;
+    shareBtn.addEventListener('click', () => navigator.share({ url: build() }).catch(() => {}));
+  }
+})();
+</script>
+</body>
+</html>
